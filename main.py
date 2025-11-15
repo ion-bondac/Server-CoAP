@@ -1,8 +1,16 @@
-# This is a sample Python script.
+import socket
+import threading
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
+Server_Ip = socket.gethostbyname(socket.gethostname()) #ia ip-ul hostului, in cazul dat laptopul personal
+Server_Port = 5683 # portul predestinat unencrypted CoAP
+
+Socket_Server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # setez la transmitere prin UDP
+Socket_Server.bind(("0.0.0.0", Server_Port)) # Atasez portul de coap pentru server
+
+client.sendto(b"Amogus",("255.255.255.255", Server_Port))
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
@@ -11,6 +19,9 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    print_hi(Server_Ip)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    while True:
+        data,addr = Socket_Server.recvfrom(1024)
+        print("recieved", data, "from",addr)
+
