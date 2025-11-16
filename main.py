@@ -1,5 +1,7 @@
 import socket
 import threading
+import time
+
 import Pachet
 
 packet = b'\x40\x01\x04\xD2' + b'\xFF' + \
@@ -26,8 +28,15 @@ if __name__ == '__main__':
     print_hi(Server_Ip)
 
     while True:
-        data,addr = Socket_Server.recvfrom(1024)
+        data,addr_client = Socket_Server.recvfrom(1024)
         header, payload = Pachet.parse_packet(data)
         print("header:",header)
         print("payload:",payload)
+        Pachet.build_and_send_acknowledgement(Socket_Server,addr_client,1,"OK")
+        time.sleep(1)
+        datac,addr_server = client.recvfrom(1024)
+        header1,payload1 = Pachet.parse_packet(datac)
+        print("header1:",header1)
+        print("payload1:",payload1)
+
 
