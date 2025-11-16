@@ -38,5 +38,6 @@ if __name__ == '__main__':
         header1,payload1 = Pachet.parse_packet(datac)
         print("header1:",header1)
         print("payload1:",payload1)
-
+        Pachet.handle_request(header,payload,addr_client,Socket_Server)
+        time.sleep(1)
 
