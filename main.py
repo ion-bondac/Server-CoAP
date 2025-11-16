@@ -1,5 +1,9 @@
 import socket
 import threading
+import Pachet
+
+packet = b'\x40\x01\x04\xD2' + b'\xFF' + \
+    b'{"action":"discover","device":"client1"}'
 
 client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
@@ -10,7 +14,7 @@ Server_Port = 5683 # portul predestinat unencrypted CoAP
 Socket_Server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # setez la transmitere prin UDP
 Socket_Server.bind(("0.0.0.0", Server_Port)) # Atasez portul de coap pentru server
 
-client.sendto(b"Amogus",("255.255.255.255", Server_Port))
+client.sendto(packet,("255.255.255.255", Server_Port))
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
@@ -23,5 +27,7 @@ if __name__ == '__main__':
 
     while True:
         data,addr = Socket_Server.recvfrom(1024)
-        print("recieved", data, "from",addr)
+        header, payload = Pachet.parse_packet(data)
+        print("header:",header)
+        print("payload:",payload)
 
