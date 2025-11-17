@@ -18,26 +18,23 @@ Socket_Server.bind(("0.0.0.0", Server_Port)) # Atasez portul de coap pentru serv
 
 client.sendto(packet,("255.255.255.255", Server_Port))
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi(Server_Ip)
+    print(Server_Ip)
 
     while True:
         data,addr_client = Socket_Server.recvfrom(1024)
         header, payload = Pachet.parse_packet(data)
         print("header:",header)
         print("payload:",payload)
-        Pachet.build_and_send_acknowledgement(Socket_Server,addr_client,1,"OK")
+        #Pachet.build_and_send_acknowledgement(Socket_Server,addr_client,1,"OK")
+        Pachet.handle_request(header,payload,addr_client,Socket_Server)
         time.sleep(1)
         datac,addr_server = client.recvfrom(1024)
         header1,payload1 = Pachet.parse_packet(datac)
         print("header1:",header1)
         print("payload1:",payload1)
-        Pachet.handle_request(header,payload,addr_client,Socket_Server)
+        #Pachet.handle_request(header,payload,addr_client,Socket_Server)
         time.sleep(1)
 
